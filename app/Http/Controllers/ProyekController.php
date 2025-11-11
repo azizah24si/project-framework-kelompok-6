@@ -12,8 +12,8 @@ class ProyekController extends Controller
      */
     public function index()
     {
-        $data['dataProyek'] = Proyek::all();
-        return view('admin.proyek.index', $data);
+        $proyeks = Proyek::paginate(10);
+        return view('proyek.index', compact('proyeks'));
     }
 
     /**
@@ -21,7 +21,7 @@ class ProyekController extends Controller
      */
     public function create()
     {
-        return view('admin.proyek.create');
+        return view('proyek.create');
     }
 
     /**
@@ -29,17 +29,20 @@ class ProyekController extends Controller
      */
     public function store(Request $request)
     {
-        $data['kode_proyek'] = $request->kode_proyek;
-        $data['nama_proyek'] = $request->nama_proyek;
-        $data['tahun']       = $request->tahun;
-        $data['lokasi']      = $request->lokasi;
-        $data['anggaran']    = $request->anggaran;
-        $data['sumber_dana'] = $request->sumber_dana;
-        $data['deskripsi']   = $request->deskripsi;
+        $request->validate([
+            'kode_proyek' => 'required|string|max:50',
+            'nama_proyek' => 'required|string|max:255',
+            'tahun'       => 'required|numeric',
+            'lokasi'      => 'required|string|max:255',
+            'anggaran'    => 'required|numeric',
+            'sumber_dana' => 'required|string|max:255',
+            'deskripsi'   => 'nullable|string',
+        ]);
 
-        Proyek::create($data);
+        Proyek::create($request->all());
 
-        return redirect()->route('proyek.index')->with('success', 'Penambahan Data Berhasil!');
+        return redirect()->route('proyek.index')
+            ->with('success', 'Proyek berhasil ditambahkan.');
     }
 
     /**
@@ -47,7 +50,8 @@ class ProyekController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $proyek = Proyek::findOrFail($id);
+        return view('proyek.show', compact('proyek'));
     }
 
     /**
@@ -55,8 +59,8 @@ class ProyekController extends Controller
      */
     public function edit(string $id)
     {
-        $data['dataProyek'] = Proyek::findOrFail($id);
-        return view('admin.proyek.edit', $data);
+        $proyek = Proyek::findOrFail($id);
+        return view('proyek.edit', compact('proyek'));
     }
 
     /**
@@ -64,19 +68,21 @@ class ProyekController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $proyek_id = $id;
-        $proyek    = Proyek::findOrFail($proyek_id);
+        $request->validate([
+            'kode_proyek' => 'required|string|max:50',
+            'nama_proyek' => 'required|string|max:255',
+            'tahun'       => 'required|numeric',
+            'lokasi'      => 'required|string|max:255',
+            'anggaran'    => 'required|numeric',
+            'sumber_dana' => 'required|string|max:255',
+            'deskripsi'   => 'nullable|string',
+        ]);
 
-        $proyek->kode_proyek = $request->kode_proyek;
-        $proyek->nama_proyek = $request->nama_proyek;
-        $proyek->tahun       = $request->tahun;
-        $proyek->lokasi      = $request->lokasi;
-        $proyek->anggaran    = $request->anggaran;
-        $proyek->sumber_dana = $request->sumber_dana;
-        $proyek->deskripsi   = $request->deskripsi;
+        $proyek = Proyek::findOrFail($id);
+        $proyek->update($request->all());
 
-        $proyek->save();
-        return redirect()->route('proyek.index')->with('success', 'Perubahan Data Berhasil');
+        return redirect()->route('proyek.index')
+            ->with('success', 'Proyek berhasil diperbarui.');
     }
 
     /**
@@ -85,8 +91,9 @@ class ProyekController extends Controller
     public function destroy(string $id)
     {
         $proyek = Proyek::findOrFail($id);
-
         $proyek->delete();
-        return redirect()->route('proyek.index')->with('success', 'Data berhasil dihapus');
+
+        return redirect()->route('proyek.index')
+            ->with('success', 'Proyek berhasil dihapus.');
     }
 }
