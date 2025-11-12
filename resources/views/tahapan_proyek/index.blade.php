@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Data Proyek')
+@section('title', 'Data Tahapan Proyek')
 
 @section('content_header')
-    <h1>Data Proyek</h1>
+    <h1>Data Tahapan Proyek</h1>
 @stop
 
 @section('content')
@@ -13,45 +13,40 @@
 
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="card-title mb-0 flex-grow-1" style="width:auto;">List Data Proyek</h3>
-            <a href="{{ route('proyek.create') }}" class="btn btn-primary">
-                <i class="fa fa-plus"></i> Create
+            <h3 class="card-title mb-0" style="width:auto;">List Data Tahapan Proyek</h3>
+            <a href="{{ route('tahapan_proyek.create') }}" class="btn btn-primary">
+                <i class="fa fa-plus"></i> Tambah Tahapan
             </a>
         </div>
-
-
 
         <div class="card-body table-responsive">
             <table id="crudTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>Kode Proyek</th>
-                        <th>Nama Proyek</th>
-                        <th>Tahun</th>
-                        <th>Lokasi</th>
-                        <th>Anggaran</th>
-                        <th>Sumber Dana</th>
-                        <th>Deskripsi</th>
-                        <th width="160">Action</th>
+                        <th>Nama Tahap</th>
+                        <th>Proyek</th>
+                        <th>Target (%)</th>
+                        <th>Tanggal Mulai</th>
+                        <th>Tanggal Selesai</th>
+                        <th width="160">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($proyeks as $item)
+                    @forelse ($tahapans as $item)
                         <tr>
-                            <td>{{ $item->kode_proyek }}</td>
-                            <td>{{ $item->nama_proyek }}</td>
-                            <td>{{ $item->tahun }}</td>
-                            <td>{{ $item->lokasi }}</td>
-                            <td>Rp {{ number_format($item->anggaran, 0, ',', '.') }}</td>
-                            <td>{{ $item->sumber_dana }}</td>
-                            <td>{{ $item->deskripsi }}</td>
+                            <td>{{ $item->nama_tahap }}</td>
+                            <td>{{ $item->proyek->nama_proyek ?? '-' }}</td>
+                            <td>{{ $item->target_persen }}%</td>
+                            <td>{{ $item->tgl_mulai }}</td>
+                            <td>{{ $item->tgl_selesai }}</td>
                             <td>
-                                <a href="{{ route('proyek.show', $item) }}" class="btn btn-sm btn-info"><i
-                                        class="fa fa-eye"></i></a>
-                                <a href="{{ route('proyek.edit', $item->proyek_id) }}" class="btn btn-sm btn-warning">
+                                <a href="{{ route('tahapan_proyek.show', $item) }}" class="btn btn-sm btn-info">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a href="{{ route('tahapan_proyek.edit', $item->tahap_id) }}" class="btn btn-sm btn-warning">
                                     <i class="fa fa-edit"></i>
                                 </a>
-                                <form action="{{ route('proyek.destroy', $item->proyek_id) }}" method="POST"
+                                <form action="{{ route('tahapan_proyek.destroy', $item->tahap_id) }}" method="POST"
                                     class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                     @csrf
                                     @method('DELETE')
@@ -63,15 +58,16 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6">No data</td>
+                            <td colspan="6" class="text-center">Tidak ada data</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        <<div class="mt-3">
-            {{ $proyeks->links() }}
-    </div>
+
+        <div class="mt-3">
+            {{ $tahapans->links() }}
+        </div>
     </div>
 @stop
 
@@ -79,7 +75,7 @@
     <script>
         $(function() {
             $('#crudTable').DataTable({
-                "paging": false, // biarkan pagination Laravel yang jalan
+                "paging": false, // pagination pakai Laravel
                 "responsive": true,
                 "lengthChange": false,
                 "autoWidth": false,
