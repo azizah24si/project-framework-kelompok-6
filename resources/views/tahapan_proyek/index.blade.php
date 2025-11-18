@@ -13,10 +13,11 @@
 
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="card-title mb-0" style="width:auto;">List Data Tahapan Proyek</h3>
+            <h3 class="card-title mb-0 flex-grow-1" style="width:auto;">List Data Proyek</h3>
             <a href="{{ route('tahapan_proyek.create') }}" class="btn btn-primary">
-                <i class="fa fa-plus"></i> Tambah Tahapan
+                <i class="fa fa-plus"></i> Create
             </a>
+        </div>
         </div>
 
         <div class="card-body table-responsive">
