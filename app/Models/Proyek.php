@@ -17,5 +17,6 @@ class Proyek extends Model
         'anggaran',
         'sumber_dana',
         'deskripsi',
+        'dokumen',
     ];
 }

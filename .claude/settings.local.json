@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php artisan:*)",
+      "Bash(timeout 5 php artisan make:model:*)",
+      "Bash(if [ ! -d \"public/uploads/proyek\" ])",
+      "Bash(then mkdir -p public/uploads/proyek)",
+      "Bash(else echo \"Directory already exists\")",
+      "Bash(fi)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

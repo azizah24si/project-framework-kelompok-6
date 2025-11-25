@@ -33,7 +33,7 @@ class ProyekController extends Controller
             $query->where('sumber_dana', $request->sumber_dana);
         }
 
-        $proyeks = $query->paginate(10);
+        $proyeks = $query->paginate(5);
 
         // Get distinct values for filters
         $tahuns = Proyek::select('tahun')->distinct()->whereNotNull('tahun')->orderBy('tahun', 'desc')->pluck('tahun');
@@ -56,16 +56,26 @@ class ProyekController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode_proyek' => 'required|string|max:50',
+            'kode_proyek' => 'required|string|max:50|unique:proyek,kode_proyek',
             'nama_proyek' => 'required|string|max:255',
-            'tahun'       => 'required|numeric',
+            'tahun'       => 'required|integer|min:1900|max:2155',
             'lokasi'      => 'required|string|max:255',
-            'anggaran'    => 'required|numeric',
+            'anggaran'    => 'required|numeric|min:0',
             'sumber_dana' => 'required|string|max:255',
             'deskripsi'   => 'nullable|string',
+            'dokumen'     => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx|max:2048',
         ]);
 
-        Proyek::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('dokumen')) {
+            $file = $request->file('dokumen');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/proyek'), $filename);
+            $data['dokumen'] = $filename;
+        }
+
+        Proyek::create($data);
 
         return redirect()->route('proyek.index')
             ->with('success', 'Proyek berhasil ditambahkan.');
@@ -94,18 +104,34 @@ class ProyekController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $proyek = Proyek::findOrFail($id);
+
         $request->validate([
-            'kode_proyek' => 'required|string|max:50',
+            'kode_proyek' => 'required|string|max:50|unique:proyek,kode_proyek,' . $id . ',proyek_id',
             'nama_proyek' => 'required|string|max:255',
-            'tahun'       => 'required|numeric',
+            'tahun'       => 'required|integer|min:1900|max:2155',
             'lokasi'      => 'required|string|max:255',
-            'anggaran'    => 'required|numeric',
+            'anggaran'    => 'required|numeric|min:0',
             'sumber_dana' => 'required|string|max:255',
             'deskripsi'   => 'nullable|string',
+            'dokumen'     => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx|max:2048',
         ]);
 
-        $proyek = Proyek::findOrFail($id);
-        $proyek->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('dokumen')) {
+            // Delete old file if exists
+            if ($proyek->dokumen && file_exists(public_path('uploads/proyek/' . $proyek->dokumen))) {
+                unlink(public_path('uploads/proyek/' . $proyek->dokumen));
+            }
+
+            $file = $request->file('dokumen');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/proyek'), $filename);
+            $data['dokumen'] = $filename;
+        }
+
+        $proyek->update($data);
 
         return redirect()->route('proyek.index')
             ->with('success', 'Proyek berhasil diperbarui.');
