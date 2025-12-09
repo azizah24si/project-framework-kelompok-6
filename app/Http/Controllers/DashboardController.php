@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Proyek;
+use App\Models\TahapanProyek;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -10,7 +13,17 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard');
+        if (!\Illuminate\Support\Facades\Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $stats = [
+            'proyek' => Proyek::count(),
+            'tahapan' => TahapanProyek::count(),
+            'users' => User::count(),
+        ];
+
+        return view('admin.dashboard', compact('stats'));
     }
 
     /**
