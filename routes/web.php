@@ -15,6 +15,11 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+// CSRF Token refresh route
+Route::get('/csrf-token', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
+});
+
 Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 

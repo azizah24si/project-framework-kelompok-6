@@ -13,6 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Replace default CSRF middleware with custom one
+        $middleware->replace(\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class, \App\Http\Middleware\VerifyCsrfTokenCustom::class);
+        
         $middleware->alias([
             'checkislogin' => CheckIsLogin::class,
             'checkrole' => CheckRole::class,
