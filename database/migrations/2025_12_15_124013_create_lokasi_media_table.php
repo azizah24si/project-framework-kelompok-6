@@ -21,7 +21,7 @@ return new class extends Migration
             $table->enum('media_type', ['gambar'])->default('gambar');
             $table->timestamps();
 
-            $table->foreign('lokasi_id')->references('lokasi_id')->on('lokasi_proyek')->onDelete('cascade');
+            // Foreign key constraint akan ditambahkan setelah tabel lokasi_proyek dibuat
         });
     }
 
