@@ -17,11 +17,18 @@
         @if ($errors->any())
             <div class="alert alert-danger" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: none; border-left: 4px solid #ef4444; border-radius: 8px;">
                 <i class="fas fa-exclamation-circle me-2"></i>
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+                @if($errors->has('csrf'))
+                    <div class="mb-2">
+                        <strong>{{ $errors->first('csrf') }}</strong>
+                    </div>
+                    <small>Tip: Jangan biarkan halaman terbuka terlalu lama sebelum submit.</small>
+                @else
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                @endif
             </div>
         @endif
 
