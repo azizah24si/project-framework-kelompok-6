@@ -30,6 +30,11 @@ class DashboardController extends Controller
             'lokasi' => $this->safeCount(LokasiProyek::class),
         ];
 
+        // Gunakan dashboard sederhana jika ada masalah dengan database
+        if ($stats['proyek'] === 0 && $stats['tahapan'] === 0 && $stats['kontraktor'] === 0) {
+            return view('admin.dashboard-simple', compact('stats'));
+        }
+        
         return view('admin.dashboard', compact('stats'));
     }
 

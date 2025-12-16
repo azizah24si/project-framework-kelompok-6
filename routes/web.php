@@ -24,7 +24,18 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.pr
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 Route::middleware('checkislogin')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', function() {
+        return view('admin.dashboard-simple', [
+            'stats' => [
+                'proyek' => 0,
+                'tahapan' => 0,
+                'users' => \App\Models\User::count(),
+                'kontraktor' => 0,
+                'progres' => 0,
+                'lokasi' => 0,
+            ]
+        ]);
+    })->name('dashboard');
 
     Route::middleware('checkrole:super admin|admin')->group(function () {
         Route::resource('users', UserController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update']);
