@@ -11,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('progres_photos', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('progres_id');
-            $table->string('file_path');
-            $table->string('original_name');
-            $table->string('mime_type')->nullable();
-            $table->integer('file_size')->nullable();
-            $table->timestamps();
+        if (!Schema::hasTable('progres_photos')) {
+            Schema::create('progres_photos', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedInteger('progres_id');
+                $table->string('file_path');
+                $table->string('original_name');
+                $table->string('mime_type')->nullable();
+                $table->integer('file_size')->nullable();
+                $table->timestamps();
 
-            // Foreign key constraint akan ditambahkan setelah tabel progres_proyek dibuat
-        });
+                // Foreign key constraint akan ditambahkan setelah tabel progres_proyek dibuat
+            });
+        }
     }
 
     /**

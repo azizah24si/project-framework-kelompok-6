@@ -58,11 +58,20 @@
                 @enderror
             </div>
 
-            <div class="d-grid">
+            <div class="d-grid mb-3">
                 <button type="submit" class="btn" style="background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); border: none; border-radius: 8px; padding: 0.875rem 2rem; font-weight: 600; color: white; transition: all 0.3s ease; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);">
                     <i class="fas fa-sign-in-alt me-2"></i>
                     Sign in
                 </button>
+            </div>
+
+            <div class="text-center">
+                <p style="color: #64748b; margin: 0;">
+                    Belum punya akun? 
+                    <a href="{{ route('register') }}" style="color: #10b981; text-decoration: none; font-weight: 600;">
+                        Daftar di sini
+                    </a>
+                </p>
             </div>
         </form>
     </div>
@@ -80,6 +89,10 @@
 
         .input-group-text {
             transition: all 0.3s ease;
+        }
+
+        a:hover {
+            text-decoration: underline !important;
         }
     </style>
 @endsection

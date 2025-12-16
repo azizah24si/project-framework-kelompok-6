@@ -46,6 +46,45 @@ class AuthController extends Controller
             ->withInput();
     }
 
+    public function showRegister()
+    {
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
+
+        return view('auth.register');
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6|confirmed',
+        ], [
+            'name.required' => 'Nama lengkap wajib diisi',
+            'email.required' => 'Email wajib diisi',
+            'email.email' => 'Format email tidak valid',
+            'email.unique' => 'Email sudah terdaftar, silakan gunakan email lain',
+            'password.required' => 'Password wajib diisi',
+            'password.min' => 'Password minimal 6 karakter',
+            'password.confirmed' => 'Konfirmasi password tidak cocok',
+        ]);
+
+        $user = User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => Hash::make($request->password),
+            'role'     => 'super admin', // Default role untuk user baru
+        ]);
+
+        // Auto login setelah register
+        Auth::login($user);
+        session(['last_login' => now()]);
+
+        return redirect()->route('dashboard')->with('success', 'Registrasi berhasil! Selamat datang!');
+    }
+
     public function logout(Request $request)
     {
         Auth::logout();

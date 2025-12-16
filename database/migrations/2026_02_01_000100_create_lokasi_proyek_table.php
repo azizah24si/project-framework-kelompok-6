@@ -11,19 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lokasi_proyek', function (Blueprint $table) {
-            $table->increments('lokasi_id');
-            $table->unsignedInteger('proyek_id');
-            $table->decimal('lat', 10, 7);
-            $table->decimal('lng', 10, 7);
-            $table->json('geojson')->nullable();
-            $table->timestamps();
+        if (!Schema::hasTable('lokasi_proyek')) {
+            Schema::create('lokasi_proyek', function (Blueprint $table) {
+                $table->increments('lokasi_id');
+                $table->unsignedInteger('proyek_id');
+                $table->decimal('lat', 10, 7);
+                $table->decimal('lng', 10, 7);
+                $table->json('geojson')->nullable();
+                $table->timestamps();
 
-            $table->foreign('proyek_id')
-                ->references('proyek_id')
-                ->on('proyek')
-                ->onDelete('cascade');
-        });
+                $table->foreign('proyek_id')
+                    ->references('proyek_id')
+                    ->on('proyek')
+                    ->onDelete('cascade');
+            });
+        }
     }
 
     /**

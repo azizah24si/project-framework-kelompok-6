@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lokasi_media', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('lokasi_id');
-            $table->string('file_path');
-            $table->string('original_name');
-            $table->string('mime_type')->nullable();
-            $table->integer('file_size')->nullable();
-            $table->enum('media_type', ['gambar'])->default('gambar');
-            $table->timestamps();
+        if (!Schema::hasTable('lokasi_media')) {
+            Schema::create('lokasi_media', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedInteger('lokasi_id');
+                $table->string('file_path');
+                $table->string('original_name');
+                $table->string('mime_type')->nullable();
+                $table->integer('file_size')->nullable();
+                $table->enum('media_type', ['gambar'])->default('gambar');
+                $table->timestamps();
 
-            // Foreign key constraint akan ditambahkan setelah tabel lokasi_proyek dibuat
-        });
+                // Foreign key constraint akan ditambahkan setelah tabel lokasi_proyek dibuat
+            });
+        }
     }
 
     /**

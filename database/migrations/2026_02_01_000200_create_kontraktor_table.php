@@ -11,20 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kontraktor', function (Blueprint $table) {
-            $table->increments('kontraktor_id');
-            $table->unsignedInteger('proyek_id');
-            $table->string('nama', 150);
-            $table->string('penanggung_jawab', 150)->nullable();
-            $table->string('kontak', 150)->nullable();
-            $table->text('alamat')->nullable();
-            $table->timestamps();
+        if (!Schema::hasTable('kontraktor')) {
+            Schema::create('kontraktor', function (Blueprint $table) {
+                $table->increments('kontraktor_id');
+                $table->unsignedInteger('proyek_id');
+                $table->string('nama', 150);
+                $table->string('penanggung_jawab', 150)->nullable();
+                $table->string('kontak', 150)->nullable();
+                $table->text('alamat')->nullable();
+                $table->timestamps();
 
-            $table->foreign('proyek_id')
-                ->references('proyek_id')
-                ->on('proyek')
-                ->onDelete('cascade');
-        });
+                $table->foreign('proyek_id')
+                    ->references('proyek_id')
+                    ->on('proyek')
+                    ->onDelete('cascade');
+            });
+        }
     }
 
     /**
