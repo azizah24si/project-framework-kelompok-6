@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('progres_photos', function (Blueprint $table) {
-            //
+        Schema::create('progres_photos_table_safe', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('progres_photos', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('progres_photos_table_safe');
     }
 };

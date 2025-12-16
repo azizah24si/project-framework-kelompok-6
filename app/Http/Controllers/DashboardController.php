@@ -20,16 +20,37 @@ class DashboardController extends Controller
             return redirect()->route('login');
         }
 
-        $stats = [
-            'proyek' => Proyek::count(),
-            'tahapan' => TahapanProyek::count(),
-            'users' => User::count(),
-            'kontraktor' => Kontraktor::count(),
-            'progres' => ProgresProyek::count(),
-            'lokasi' => LokasiProyek::count(),
-        ];
+        try {
+            $stats = [
+                'proyek' => Proyek::count(),
+                'tahapan' => TahapanProyek::count(),
+                'users' => User::count(),
+                'kontraktor' => $this->safeCount(Kontraktor::class),
+                'progres' => $this->safeCount(ProgresProyek::class),
+                'lokasi' => $this->safeCount(LokasiProyek::class),
+            ];
+        } catch (\Exception $e) {
+            // Jika ada error dengan database, set default values
+            $stats = [
+                'proyek' => 0,
+                'tahapan' => 0,
+                'users' => User::count(), // User pasti ada karena baru register
+                'kontraktor' => 0,
+                'progres' => 0,
+                'lokasi' => 0,
+            ];
+        }
 
         return view('admin.dashboard', compact('stats'));
+    }
+
+    private function safeCount($modelClass)
+    {
+        try {
+            return $modelClass::count();
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 
     /**

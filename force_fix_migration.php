@@ -12,9 +12,7 @@ echo "=== FORCE FIX MIGRATION ===\n";
 try {
     // Langsung insert migrasi yang bermasalah ke tabel migrations
     $problematicMigrations = [
-        '2025_12_15_123055_create_progres_photos_table',
         '2025_12_15_124013_create_lokasi_media_table',
-        '2025_12_16_113002_add_foreign_key_to_progres_photos_table',
         '2026_01_09_000000_add_role_column_to_users_table',
         '2026_02_01_000000_create_progres_proyek_table',
         '2026_02_01_000100_create_lokasi_proyek_table',

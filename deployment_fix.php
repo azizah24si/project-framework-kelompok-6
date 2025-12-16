@@ -12,9 +12,7 @@ echo "=== DEPLOYMENT FIX SCRIPT ===\n";
 
 // Daftar migrasi yang mungkin sudah ada tabelnya tapi belum tercatat
 $problematicMigrations = [
-    '2025_12_15_123055_create_progres_photos_table' => 'progres_photos',
     '2025_12_15_124013_create_lokasi_media_table' => 'lokasi_media',
-    '2025_12_16_113002_add_foreign_key_to_progres_photos_table' => null, // tidak ada tabel baru
     '2026_01_09_000000_add_role_column_to_users_table' => null, // kolom di tabel users
     '2026_02_01_000000_create_progres_proyek_table' => 'progres_proyek',
     '2026_02_01_000100_create_lokasi_proyek_table' => 'lokasi_proyek',
