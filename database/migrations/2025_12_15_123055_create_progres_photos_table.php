@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('file_size')->nullable();
             $table->timestamps();
 
-            $table->foreign('progres_id')->references('progres_id')->on('progres_proyek')->onDelete('cascade');
+            // Foreign key constraint akan ditambahkan setelah tabel progres_proyek dibuat
         });
     }
 
