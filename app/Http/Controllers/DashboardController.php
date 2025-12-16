@@ -20,26 +20,15 @@ class DashboardController extends Controller
             return redirect()->route('login');
         }
 
-        try {
-            $stats = [
-                'proyek' => Proyek::count(),
-                'tahapan' => TahapanProyek::count(),
-                'users' => User::count(),
-                'kontraktor' => $this->safeCount(Kontraktor::class),
-                'progres' => $this->safeCount(ProgresProyek::class),
-                'lokasi' => $this->safeCount(LokasiProyek::class),
-            ];
-        } catch (\Exception $e) {
-            // Jika ada error dengan database, set default values
-            $stats = [
-                'proyek' => 0,
-                'tahapan' => 0,
-                'users' => User::count(), // User pasti ada karena baru register
-                'kontraktor' => 0,
-                'progres' => 0,
-                'lokasi' => 0,
-            ];
-        }
+        // Hanya gunakan model yang pasti ada
+        $stats = [
+            'proyek' => $this->safeCount(Proyek::class),
+            'tahapan' => $this->safeCount(TahapanProyek::class),
+            'users' => $this->safeCount(User::class),
+            'kontraktor' => $this->safeCount(Kontraktor::class),
+            'progres' => $this->safeCount(ProgresProyek::class),
+            'lokasi' => $this->safeCount(LokasiProyek::class),
+        ];
 
         return view('admin.dashboard', compact('stats'));
     }
@@ -49,6 +38,8 @@ class DashboardController extends Controller
         try {
             return $modelClass::count();
         } catch (\Exception $e) {
+            // Jika tabel belum ada atau ada error, return 0
+            \Log::warning("Error counting {$modelClass}: " . $e->getMessage());
             return 0;
         }
     }

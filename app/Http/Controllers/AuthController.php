@@ -82,12 +82,7 @@ class AuthController extends Controller
         Auth::login($user);
         session(['last_login' => now()]);
 
-        try {
-            return redirect()->route('dashboard')->with('success', 'Registrasi berhasil! Selamat datang!');
-        } catch (\Exception $e) {
-            // Jika dashboard error, redirect ke halaman sederhana
-            return redirect()->route('profile.show')->with('success', 'Registrasi berhasil! Selamat datang!');
-        }
+        return redirect()->route('dashboard')->with('success', 'Registrasi berhasil! Selamat datang!');
     }
 
     public function logout(Request $request)
