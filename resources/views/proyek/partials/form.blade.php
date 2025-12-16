@@ -73,14 +73,13 @@
 </div>
 
 <div class="form-group mb-3">
-    <label for="dokumen_proyek" class="form-label">Dokumen Pendukung</label>
+    <label for="foto_proyek" class="form-label">
+        <i class="fa fa-camera"></i> Foto Proyek
+    </label>
     <input type="file" class="form-control @error('dokumen_proyek.*') is-invalid @enderror"
-           id="dokumen_proyek" name="dokumen_proyek[]" multiple
-           accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.zip">
-    <small class="text-muted">Unggah beberapa file (PDF, Office, gambar, ZIP) maksimal 5MB per file.</small>
-    @error('dokumen_proyek')
-        <div class="invalid-feedback d-block">{{ $message }}</div>
-    @enderror
+           id="foto_proyek" name="dokumen_proyek[]" multiple
+           accept=".jpg,.jpeg,.png,.gif">
+    <small class="text-muted">Upload foto proyek (JPG, PNG, GIF) maksimal 5MB per file.</small>
     @error('dokumen_proyek.*')
         <div class="invalid-feedback d-block">{{ $message }}</div>
     @enderror
@@ -91,31 +90,41 @@
 @endphp
 
 @if($hasAttachments)
+    @php
+        $photos = $proyek->files->filter(function($file) {
+            return in_array(strtolower(pathinfo($file->original_name, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']);
+        });
+    @endphp
+    
+    @if($photos->count() > 0)
     <div class="mb-3">
-        <label class="form-label">Dokumen Saat Ini</label>
-        <ul class="list-group">
-            @foreach($proyek->files as $file)
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>{{ $file->original_name }}</strong>
-                        <div class="text-muted small">
-                            {{ number_format(($file->file_size ?? 0) / 1024, 1) }} KB
+        <label class="form-label">
+            <i class="fa fa-camera"></i> Foto Proyek Saat Ini
+        </label>
+        <div class="row">
+            @foreach($photos as $photo)
+                <div class="col-6 col-md-3 mb-2">
+                    <div class="card">
+                        <img src="{{ Storage::url($photo->file_path) }}" class="card-img-top" style="height: 100px; object-fit: cover;">
+                        <div class="card-body p-2">
+                            <small class="text-muted">{{ Str::limit($photo->original_name, 15) }}</small>
+                            <div class="btn-group w-100 mt-1">
+                                <a href="{{ Storage::url($photo->file_path) }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <form action="{{ route('proyek.files.destroy', $photo->id) }}" method="POST" onsubmit="return confirm('Hapus foto ini?')" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-outline-danger" type="submit">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                    <div class="d-flex gap-2">
-                        <a href="{{ Storage::url($file->file_path) }}" class="btn btn-sm btn-outline-primary" target="_blank">
-                            <i class="fa fa-download"></i>
-                        </a>
-                        <form action="{{ route('proyek.files.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Hapus dokumen ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-sm btn-outline-danger" type="submit">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </form>
-                    </div>
-                </li>
+                </div>
             @endforeach
-        </ul>
+        </div>
     </div>
+    @endif
 @endif

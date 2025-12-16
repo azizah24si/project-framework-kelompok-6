@@ -12,7 +12,7 @@
             <form action="{{ route('proyek.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                @include('proyek.form')
+                @include('proyek.partials.form')
 
                 <button type="submit" class="btn btn-primary mt-3">
                     <i class="fa fa-save"></i> Save

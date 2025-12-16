@@ -57,10 +57,9 @@
     <main>
 
         <!-- Section -->
-        <section class="vh-lg-100 mt-5 mt-lg-0 bg-soft d-flex align-items-center">
+        <section class="vh-lg-100 mt-5 mt-lg-0 d-flex align-items-center" style="background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 50%, #e1f5fe 100%); min-height: 100vh;">
             <div class="container">
-                <div class="row justify-content-center form-bg-image"
-                    data-background-lg="{{ asset('assets-admin') }}/img/illustrations/signin.svg">
+                <div class="row justify-content-center">
                     <div class="col-12 d-flex align-items-center justify-content-center">
                         @yield('content')
                     </div>
@@ -113,5 +112,6 @@
 </body>
 
 </html>
+
 
 

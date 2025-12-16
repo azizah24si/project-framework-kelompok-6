@@ -49,48 +49,60 @@
         </div>
     </div>
 
+    @php
+        $photos = $proyek->files->filter(function($file) {
+            return in_array(strtolower(pathinfo($file->original_name, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']);
+        });
+    @endphp
+
+    <!-- Foto Proyek -->
     <div class="card mt-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="card-title mb-0">Dokumen Proyek</h3>
+        <div class="card-header">
+            <h3 class="card-title mb-0">
+                <i class="fa fa-camera"></i> Foto Proyek
+            </h3>
         </div>
         <div class="card-body">
-            @if ($proyek->files->isEmpty())
-                <p class="text-muted mb-3">Belum ada dokumen yang diunggah.</p>
+            @if ($photos->isEmpty())
+                <p class="text-muted mb-3">Belum ada foto yang diunggah.</p>
             @else
-                <ul class="list-group mb-4">
-                    @foreach ($proyek->files as $file)
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>{{ $file->original_name }}</strong>
-                                <div class="text-muted small">
-                                    {{ number_format(($file->file_size ?? 0) / 1024, 1) }} KB
+                <div class="row">
+                    @foreach ($photos as $photo)
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="card">
+                                <img src="{{ Storage::url($photo->file_path) }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                <div class="card-body p-2">
+                                    <small class="text-muted">{{ $photo->original_name }}</small>
+                                    <div class="btn-group w-100 mt-2">
+                                        <a href="{{ Storage::url($photo->file_path) }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                            <i class="fa fa-eye"></i> Lihat
+                                        </a>
+                                        <form action="{{ route('proyek.files.destroy', $photo->id) }}" method="POST" onsubmit="return confirm('Hapus foto ini?')" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="d-flex gap-2">
-                                <a href="{{ Storage::url($file->file_path) }}" class="btn btn-sm btn-outline-primary" target="_blank">
-                                    <i class="fa fa-download"></i> Lihat
-                                </a>
-                                <form action="{{ route('proyek.files.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Hapus dokumen ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-outline-danger" type="submit">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </li>
+                        </div>
                     @endforeach
-                </ul>
+                </div>
             @endif
 
+            <!-- Form Upload Foto -->
             <form action="{{ route('proyek.files.store', $proyek->proyek_id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
-                    <label for="detail_dokumen" class="form-label">Tambah Dokumen</label>
+                    <label for="foto_upload" class="form-label">
+                        <i class="fa fa-camera"></i> Tambah Foto
+                    </label>
                     <input type="file" class="form-control @error('dokumen_proyek.*') is-invalid @enderror"
-                           id="detail_dokumen" name="dokumen_proyek[]" multiple
-                           accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.zip">
-                    <small class="text-muted">Pilih satu atau beberapa file (maks 5MB per file).</small>
+                           id="foto_upload" name="dokumen_proyek[]" multiple
+                           accept=".jpg,.jpeg,.png,.gif">
+                    <small class="text-muted">Upload foto (JPG, PNG, GIF) maksimal 5MB per file.</small>
                     @error('dokumen_proyek')
                         <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
@@ -99,7 +111,7 @@
                     @enderror
                 </div>
                 <button type="submit" class="btn btn-primary mt-3">
-                    <i class="fa fa-upload"></i> Unggah Dokumen
+                    <i class="fa fa-upload"></i> Upload Foto
                 </button>
             </form>
         </div>

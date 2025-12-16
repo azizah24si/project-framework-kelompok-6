@@ -30,6 +30,26 @@ class Proyek extends Model
         return $this->hasMany(ProyekFile::class, 'proyek_id', 'proyek_id');
     }
 
+    public function tahapans()
+    {
+        return $this->hasMany(TahapanProyek::class, 'proyek_id', 'proyek_id');
+    }
+
+    public function progres()
+    {
+        return $this->hasMany(ProgresProyek::class, 'proyek_id', 'proyek_id');
+    }
+
+    public function lokasi()
+    {
+        return $this->hasOne(LokasiProyek::class, 'proyek_id', 'proyek_id');
+    }
+
+    public function kontraktors()
+    {
+        return $this->hasMany(Kontraktor::class, 'proyek_id', 'proyek_id');
+    }
+
     public function getCoverPhotoUrlAttribute(): string
     {
         $files = $this->relationLoaded('files') ? $this->files : $this->files()->get();

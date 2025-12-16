@@ -51,7 +51,8 @@ class ProyekController extends Controller
         // Paginate with query parameters preserved
         $proyeks = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
-        return view('proyek.index', compact('proyeks', 'tahunList', 'sumberDanaList', 'lokasiList'));
+        $items = $proyeks; // Alias untuk konsistensi dengan view
+        return view('proyek.index', compact('items', 'proyeks', 'tahunList', 'sumberDanaList', 'lokasiList'));
     }
 
     /**

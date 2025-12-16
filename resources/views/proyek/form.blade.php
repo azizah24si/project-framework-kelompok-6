@@ -1,1 +1,0 @@
-@include('proyek.partials.form')

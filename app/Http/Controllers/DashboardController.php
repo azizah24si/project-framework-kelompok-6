@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 use App\Models\Proyek;
 use App\Models\TahapanProyek;
 use App\Models\User;
+use App\Models\Kontraktor;
+use App\Models\ProgresProyek;
+use App\Models\LokasiProyek;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -21,6 +24,9 @@ class DashboardController extends Controller
             'proyek' => Proyek::count(),
             'tahapan' => TahapanProyek::count(),
             'users' => User::count(),
+            'kontraktor' => Kontraktor::count(),
+            'progres' => ProgresProyek::count(),
+            'lokasi' => LokasiProyek::count(),
         ];
 
         return view('admin.dashboard', compact('stats'));

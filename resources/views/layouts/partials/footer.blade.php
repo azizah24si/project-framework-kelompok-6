@@ -1,7 +1,7 @@
 <footer class="main-footer">
-    <strong>&copy; {{ date('Y') }} AdminLTE Template.</strong>
-    <div class="float-right d-none d-sm-inline-block">
-        <b>Version</b> 1.0
+    <div class="text-center">
+        <strong style="color: #3b82f6;">Pembangunan Monitoring Proyek</strong>
     </div>
 </footer>
+
 

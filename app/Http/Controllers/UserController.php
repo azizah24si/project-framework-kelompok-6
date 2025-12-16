@@ -52,6 +52,13 @@ class UserController extends Controller
             ->with('success', 'Pengguna baru berhasil ditambahkan.');
     }
 
+    public function show(string $id)
+    {
+        $user = User::findOrFail($id);
+
+        return view('users.show', compact('user'));
+    }
+
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
