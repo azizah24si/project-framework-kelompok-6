@@ -25,6 +25,18 @@ class Proyek extends Model
         'cover_photo_url',
     ];
 
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'proyek_id';
+    }
+
+    protected $appends = [
+        'cover_photo_url',
+    ];
+
     public function files()
     {
         return $this->hasMany(ProyekFile::class, 'proyek_id', 'proyek_id');

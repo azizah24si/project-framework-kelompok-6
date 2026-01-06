@@ -70,7 +70,7 @@
                                        title="Lihat Detail">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('proyek.edit', $item->proyek_id) }}" 
+                                    <a href="{{ route('proyek.edit', $item) }}" 
                                        class="btn btn-sm" 
                                        style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); 
                                               color: white; 
@@ -83,7 +83,7 @@
                                        title="Edit Proyek">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('proyek.destroy', $item->proyek_id) }}" method="POST"
+                                    <form action="{{ route('proyek.destroy', $item) }}" method="POST"
                                         class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                         @csrf
                                         @method('DELETE')
