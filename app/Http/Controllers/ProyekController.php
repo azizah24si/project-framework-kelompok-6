@@ -68,6 +68,11 @@ class ProyekController extends Controller
      */
     public function store(Request $request)
     {
+        // Preprocess anggaran: hapus titik pemisah ribuan
+        $request->merge([
+            'anggaran' => str_replace('.', '', $request->anggaran)
+        ]);
+
         $validated = $request->validate([
             'kode_proyek' => 'required|string|max:50',
             'nama_proyek' => 'required|string|max:255',
@@ -110,6 +115,11 @@ class ProyekController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // Preprocess anggaran: hapus titik pemisah ribuan
+        $request->merge([
+            'anggaran' => str_replace('.', '', $request->anggaran)
+        ]);
+
         $validated = $request->validate([
             'kode_proyek' => 'required|string|max:50',
             'nama_proyek' => 'required|string|max:255',

@@ -55,9 +55,11 @@
 
 <div class="form-group mb-3">
     <label for="anggaran" class="form-label">Anggaran (Rp)</label>
-    <input type="number" class="form-control @error('anggaran') is-invalid @enderror"
+    <input type="text" class="form-control @error('anggaran') is-invalid @enderror"
            id="anggaran" name="anggaran"
-           value="{{ old('anggaran', $proyek->anggaran ?? '') }}" required>
+           value="{{ old('anggaran', isset($proyek->anggaran) ? number_format($proyek->anggaran, 0, ',', '.') : '') }}" 
+           placeholder="Contoh: 7.000.000" required>
+    <small class="text-muted">Masukkan angka tanpa "Rp" dan gunakan titik sebagai pemisah ribuan</small>
     @error('anggaran')
         <div class="invalid-feedback">{{ $message }}</div>
     @enderror
@@ -128,3 +130,28 @@
     </div>
     @endif
 @endif
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const anggaranInput = document.getElementById('anggaran');
+    
+    // Format input saat user mengetik
+    anggaranInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, ''); // Hapus semua karakter non-digit
+        
+        if (value) {
+            // Format dengan titik sebagai pemisah ribuan
+            value = parseInt(value).toLocaleString('id-ID');
+        }
+        
+        e.target.value = value;
+    });
+    
+    // Sebelum form disubmit, ubah format kembali ke angka
+    const form = anggaranInput.closest('form');
+    form.addEventListener('submit', function(e) {
+        const rawValue = anggaranInput.value.replace(/\./g, ''); // Hapus titik
+        anggaranInput.value = rawValue;
+    });
+});
+</script>
