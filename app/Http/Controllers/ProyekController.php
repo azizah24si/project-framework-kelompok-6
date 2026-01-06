@@ -95,25 +95,25 @@ class ProyekController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Proyek $proyek)
     {
-        $proyek = Proyek::with('files')->findOrFail($id);
+        $proyek->load('files');
         return view('proyek.show', compact('proyek'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Proyek $proyek)
     {
-        $proyek = Proyek::with('files')->findOrFail($id);
+        $proyek->load('files');
         return view('proyek.edit', compact('proyek'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Proyek $proyek)
     {
         // Preprocess anggaran: hapus titik pemisah ribuan
         $request->merge([
@@ -132,7 +132,6 @@ class ProyekController extends Controller
             'dokumen_proyek.*' => 'file|max:5120|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png,zip',
         ]);
 
-        $proyek = Proyek::findOrFail($id);
         $proyek->update($validated);
         $this->handleAttachmentUpload($request->file('dokumen_proyek'), $proyek);
 
@@ -143,9 +142,8 @@ class ProyekController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Proyek $proyek)
     {
-        $proyek = Proyek::findOrFail($id);
         $proyek->delete();
 
         return redirect()->route('proyek.index')

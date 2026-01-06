@@ -48,18 +48,18 @@ class TahapanProyekController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(TahapanProyek $tahapan_proyek)
     {
-        $tahapan = TahapanProyek::with('proyek')->findOrFail($id);
+        $tahapan = $tahapan_proyek->load('proyek');
         return view('tahapan_proyek.show', compact('tahapan'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(TahapanProyek $tahapan_proyek)
     {
-        $tahapan = TahapanProyek::findOrFail($id);
+        $tahapan = $tahapan_proyek;
         $proyeks = Proyek::all();
         return view('tahapan_proyek.edit', compact('tahapan', 'proyeks'));
     }
@@ -67,7 +67,7 @@ class TahapanProyekController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, TahapanProyek $tahapan_proyek)
     {
         $request->validate([
             'proyek_id'     => 'required|exists:proyek,proyek_id',
@@ -77,8 +77,7 @@ class TahapanProyekController extends Controller
             'tgl_selesai'   => 'required|date|after_or_equal:tgl_mulai',
         ]);
 
-        $tahapan = TahapanProyek::findOrFail($id);
-        $tahapan->update($request->all());
+        $tahapan_proyek->update($request->all());
 
         return redirect()->route('tahapan_proyek.index')
             ->with('success', 'Tahapan proyek berhasil diperbarui.');
@@ -87,10 +86,9 @@ class TahapanProyekController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(TahapanProyek $tahapan_proyek)
     {
-        $tahapan = TahapanProyek::findOrFail($id);
-        $tahapan->delete();
+        $tahapan_proyek->delete();
 
         return redirect()->route('tahapan_proyek.index')
             ->with('success', 'Tahapan proyek berhasil dihapus.');
