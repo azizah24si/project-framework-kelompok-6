@@ -9,11 +9,11 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('proyek.update', $proyek) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('proyek.update', $proyek->proyek_id) }}" method="POST">
                 @csrf
                 @method('PUT')
 
-                @include('proyek.partials.form')
+                @include('proyek.form')
 
                 <button type="submit" class="btn btn-primary mt-3">
                     <i class="fa fa-save"></i> Update

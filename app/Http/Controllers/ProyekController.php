@@ -68,11 +68,6 @@ class ProyekController extends Controller
      */
     public function store(Request $request)
     {
-        // Preprocess anggaran: hapus titik pemisah ribuan
-        $request->merge([
-            'anggaran' => str_replace('.', '', $request->anggaran)
-        ]);
-
         $validated = $request->validate([
             'kode_proyek' => 'required|string|max:50',
             'nama_proyek' => 'required|string|max:255',
@@ -95,25 +90,25 @@ class ProyekController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Proyek $proyek)
+    public function show($proyek)
     {
-        $proyek->load('files');
+        $proyek = Proyek::where('proyek_id', $proyek)->with('files')->firstOrFail();
         return view('proyek.show', compact('proyek'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Proyek $proyek)
+    public function edit($proyek)
     {
-        $proyek->load('files');
+        $proyek = Proyek::where('proyek_id', $proyek)->with('files')->firstOrFail();
         return view('proyek.edit', compact('proyek'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Proyek $proyek)
+    public function update(Request $request, $proyek)
     {
         // Preprocess anggaran: hapus titik pemisah ribuan
         $request->merge([
@@ -132,8 +127,9 @@ class ProyekController extends Controller
             'dokumen_proyek.*' => 'file|max:5120|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png,zip',
         ]);
 
-        $proyek->update($validated);
-        $this->handleAttachmentUpload($request->file('dokumen_proyek'), $proyek);
+        $proyekModel = Proyek::where('proyek_id', $proyek)->firstOrFail();
+        $proyekModel->update($validated);
+        $this->handleAttachmentUpload($request->file('dokumen_proyek'), $proyekModel);
 
         return redirect()->route('proyek.index')
             ->with('success', 'Proyek berhasil diperbarui.');
@@ -142,9 +138,10 @@ class ProyekController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Proyek $proyek)
+    public function destroy($proyek)
     {
-        $proyek->delete();
+        $proyekModel = Proyek::where('proyek_id', $proyek)->firstOrFail();
+        $proyekModel->delete();
 
         return redirect()->route('proyek.index')
             ->with('success', 'Proyek berhasil dihapus.');
