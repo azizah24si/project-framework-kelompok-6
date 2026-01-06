@@ -15,32 +15,16 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// CSRF Token refresh route
-Route::get('/csrf-token', function () {
-    return response()->json(['csrf_token' => csrf_token()]);
-});
-
 Route::get('/login', [AuthController::class, 'index'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.process');
+Route::post('/login', [AuthController::class, 'login'])->name('login.process')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfTokenCustom::class]);
 
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.process');
+Route::post('/register', [AuthController::class, 'register'])->name('register.process')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfTokenCustom::class]);
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 Route::middleware('checkislogin')->group(function () {
-    Route::get('/dashboard', function() {
-        return view('admin.dashboard-simple', [
-            'stats' => [
-                'proyek' => 0,
-                'tahapan' => 0,
-                'users' => \App\Models\User::count(),
-                'kontraktor' => 0,
-                'progres' => 0,
-                'lokasi' => 0,
-            ]
-        ]);
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::middleware('checkrole:super admin|admin')->group(function () {
         Route::resource('users', UserController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update']);

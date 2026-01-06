@@ -39,9 +39,6 @@
     <link rel="mask-icon" href="{{ asset('assets-admin') }}/assets/img/favicon/safari-pinned-tab.svg" color="#ffffff">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
-    
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Sweet Alert -->
     <link type="text/css" href="{{ asset('assets-admin') }}/vendor/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
@@ -111,49 +108,6 @@
 
     <!-- Volt JS -->
     <script src="{{ asset('assets-admin') }}/js/volt.js"></script>
-    
-    <!-- CSRF Token Refresh Script -->
-    <script>
-        // Set CSRF token for all AJAX requests
-        document.addEventListener('DOMContentLoaded', function() {
-            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
-            // Add CSRF token to all forms
-            const forms = document.querySelectorAll('form');
-            forms.forEach(function(form) {
-                let csrfInput = form.querySelector('input[name="_token"]');
-                if (csrfInput) {
-                    csrfInput.value = token;
-                }
-            });
-            
-            // Refresh CSRF token every 30 minutes
-            setInterval(function() {
-                fetch('/csrf-token', {
-                    method: 'GET',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.csrf_token) {
-                        document.querySelector('meta[name="csrf-token"]').setAttribute('content', data.csrf_token);
-                        forms.forEach(function(form) {
-                            let csrfInput = form.querySelector('input[name="_token"]');
-                            if (csrfInput) {
-                                csrfInput.value = data.csrf_token;
-                            }
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.log('CSRF token refresh failed:', error);
-                });
-            }, 30 * 60 * 1000); // 30 minutes
-        });
-    </script>
 
 </body>
 

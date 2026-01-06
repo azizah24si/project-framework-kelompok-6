@@ -20,33 +20,16 @@ class DashboardController extends Controller
             return redirect()->route('login');
         }
 
-        // Hanya gunakan model yang pasti ada
         $stats = [
-            'proyek' => $this->safeCount(Proyek::class),
-            'tahapan' => $this->safeCount(TahapanProyek::class),
-            'users' => $this->safeCount(User::class),
-            'kontraktor' => $this->safeCount(Kontraktor::class),
-            'progres' => $this->safeCount(ProgresProyek::class),
-            'lokasi' => $this->safeCount(LokasiProyek::class),
+            'proyek' => Proyek::count(),
+            'tahapan' => TahapanProyek::count(),
+            'users' => User::count(),
+            'kontraktor' => Kontraktor::count(),
+            'progres' => ProgresProyek::count(),
+            'lokasi' => LokasiProyek::count(),
         ];
 
-        // Gunakan dashboard sederhana jika ada masalah dengan database
-        if ($stats['proyek'] === 0 && $stats['tahapan'] === 0 && $stats['kontraktor'] === 0) {
-            return view('admin.dashboard-simple', compact('stats'));
-        }
-        
         return view('admin.dashboard', compact('stats'));
-    }
-
-    private function safeCount($modelClass)
-    {
-        try {
-            return $modelClass::count();
-        } catch (\Exception $e) {
-            // Jika tabel belum ada atau ada error, return 0
-            \Log::warning("Error counting {$modelClass}: " . $e->getMessage());
-            return 0;
-        }
     }
 
     /**
