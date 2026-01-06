@@ -16,10 +16,10 @@ Route::get('/', function () {
 });
 
 Route::get('/login', [AuthController::class, 'index'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.process')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfTokenCustom::class]);
+Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.process')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfTokenCustom::class]);
+Route::post('/register', [AuthController::class, 'register'])->name('register.process');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
@@ -27,25 +27,32 @@ Route::middleware('checkislogin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::middleware('checkrole:super admin|admin')->group(function () {
-        Route::resource('users', UserController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update']);
+        Route::resource('users', UserController::class)
+            ->only(['index', 'create', 'store', 'show', 'edit', 'update']);
     });
 
-    Route::post('proyek/{proyek}/files', [ProyekController::class, 'storeFiles'])->name('proyek.files.store');
-    Route::delete('proyek/files/{file}', [ProyekController::class, 'destroyFile'])->name('proyek.files.destroy');
+    Route::post('proyek/{proyek}/files', [ProyekController::class, 'storeFiles'])
+        ->name('proyek.files.store');
+    Route::delete('proyek/files/{file}', [ProyekController::class, 'destroyFile'])
+        ->name('proyek.files.destroy');
     Route::resource('proyek', ProyekController::class);
 
     Route::resource('tahapan_proyek', TahapanProyekController::class);
-    
-    Route::delete('progres_proyek/photos/{photo}', [ProgresProyekController::class, 'destroyPhoto'])->name('progres_proyek.photos.destroy');
+
+    Route::delete('progres_proyek/photos/{photo}', [ProgresProyekController::class, 'destroyPhoto'])
+        ->name('progres_proyek.photos.destroy');
     Route::resource('progres_proyek', ProgresProyekController::class);
-    
-    Route::delete('lokasi_proyek/media/{media}', [LokasiProyekController::class, 'destroyMedia'])->name('lokasi_proyek.media.destroy');
+
+    Route::delete('lokasi_proyek/media/{media}', [LokasiProyekController::class, 'destroyMedia'])
+        ->name('lokasi_proyek.media.destroy');
     Route::resource('lokasi_proyek', LokasiProyekController::class);
+
     Route::resource('kontraktor', KontraktorController::class);
-    
-    // Profile routes
+
     Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
-    Route::delete('profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
+    Route::put('profile/password', [ProfileController::class, 'updatePassword'])
+        ->name('profile.password.update');
+    Route::delete('profile/photo', [ProfileController::class, 'deletePhoto'])
+        ->name('profile.photo.delete');
 });
