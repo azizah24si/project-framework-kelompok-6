@@ -20,16 +20,47 @@ class DashboardController extends Controller
             return redirect()->route('login');
         }
 
-        $stats = [
-            'proyek' => Proyek::count(),
-            'tahapan' => TahapanProyek::count(),
-            'users' => User::count(),
-            'kontraktor' => Kontraktor::count(),
-            'progres' => ProgresProyek::count(),
-            'lokasi' => LokasiProyek::count(),
-        ];
+        try {
+            $stats = [
+                'proyek' => $this->safeModelCount('App\Models\Proyek'),
+                'tahapan' => $this->safeModelCount('App\Models\TahapanProyek'),
+                'users' => $this->safeModelCount('App\Models\User'),
+                'kontraktor' => $this->safeModelCount('App\Models\Kontraktor'),
+                'progres' => $this->safeModelCount('App\Models\ProgresProyek'),
+                'lokasi' => $this->safeModelCount('App\Models\LokasiProyek'),
+            ];
 
-        return view('admin.dashboard', compact('stats'));
+            return view('admin.dashboard', compact('stats'));
+            
+        } catch (\Exception $e) {
+            // Jika ada error, gunakan stats default
+            $stats = [
+                'proyek' => 0,
+                'tahapan' => 0,
+                'users' => 1, // Minimal ada 1 user yang login
+                'kontraktor' => 0,
+                'progres' => 0,
+                'lokasi' => 0,
+            ];
+            
+            // Log error untuk debugging
+            \Log::error('Dashboard error: ' . $e->getMessage());
+            
+            return view('admin.dashboard', compact('stats'));
+        }
+    }
+
+    private function safeModelCount($modelClass)
+    {
+        try {
+            if (class_exists($modelClass)) {
+                return $modelClass::count();
+            }
+            return 0;
+        } catch (\Exception $e) {
+            \Log::warning("Error counting {$modelClass}: " . $e->getMessage());
+            return 0;
+        }
     }
 
     /**
