@@ -23,6 +23,14 @@ class LokasiProyek extends Model
         'geojson' => 'array',
     ];
 
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'lokasi_id';
+    }
+
     public function proyek()
     {
         return $this->belongsTo(Proyek::class, 'proyek_id', 'proyek_id');

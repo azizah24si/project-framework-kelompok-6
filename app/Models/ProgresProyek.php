@@ -20,6 +20,14 @@ class ProgresProyek extends Model
         'catatan',
     ];
 
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'progres_id';
+    }
+
     public function proyek()
     {
         return $this->belongsTo(Proyek::class, 'proyek_id', 'proyek_id');

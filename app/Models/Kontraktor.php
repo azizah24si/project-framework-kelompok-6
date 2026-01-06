@@ -20,6 +20,14 @@ class Kontraktor extends Model
         'alamat',
     ];
 
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'kontraktor_id';
+    }
+
     public function proyek()
     {
         return $this->belongsTo(Proyek::class, 'proyek_id', 'proyek_id');
