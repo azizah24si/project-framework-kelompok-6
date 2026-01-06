@@ -9,7 +9,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('proyek.update', $proyek->proyek_id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('proyek.update', $proyek) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
