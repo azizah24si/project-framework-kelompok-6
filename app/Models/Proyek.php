@@ -33,10 +33,6 @@ class Proyek extends Model
         return 'proyek_id';
     }
 
-    protected $appends = [
-        'cover_photo_url',
-    ];
-
     public function files()
     {
         return $this->hasMany(ProyekFile::class, 'proyek_id', 'proyek_id');
