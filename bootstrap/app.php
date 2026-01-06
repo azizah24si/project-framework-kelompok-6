@@ -13,9 +13,18 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Use custom CSRF middleware for hosting compatibility
+        if (app()->environment('production')) {
+            $middleware->replace(
+                \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class, 
+                \App\Http\Middleware\VerifyCsrfTokenHosting::class
+            );
+        }
+        
         $middleware->alias([
             'checkislogin' => CheckIsLogin::class,
             'checkrole' => CheckRole::class,
+            'disable.csrf.auth' => \App\Http\Middleware\DisableCsrfForAuth::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
