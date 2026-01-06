@@ -50,7 +50,7 @@
                         <input type="text" name="catatan" value="{{ old('catatan', $item->catatan) }}" class="form-control">
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="foto_progres" class="form-label">
                         <i class="fa fa-camera"></i> Foto Progres
@@ -95,9 +95,9 @@
                     </div>
                 </div>
                 @endif
-                <button type="submit" class="btn btn-primary mt-3">
-                    <i class="fa fa-save"></i> Update
-                </button>
+                <a href="{{ route('proyek.index') }}" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> Update
+                    </a>
                 <a href="{{ route('progres_proyek.index') }}" class="btn btn-secondary mt-3">
                     <i class="fa fa-arrow-left"></i> Back
                 </a>

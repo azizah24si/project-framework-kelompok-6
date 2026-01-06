@@ -57,7 +57,7 @@
     <label for="anggaran" class="form-label">Anggaran (Rp)</label>
     <input type="text" class="form-control @error('anggaran') is-invalid @enderror"
            id="anggaran" name="anggaran"
-           value="{{ old('anggaran', isset($proyek->anggaran) ? number_format($proyek->anggaran, 0, ',', '.') : '') }}" 
+           value="{{ old('anggaran', isset($proyek->anggaran) ? number_format($proyek->anggaran, 0, ',', '.') : '') }}"
            placeholder="Contoh: 7.000.000" required>
     <small class="text-muted">Masukkan angka tanpa "Rp" dan gunakan titik sebagai pemisah ribuan</small>
     @error('anggaran')
@@ -97,7 +97,7 @@
             return in_array(strtolower(pathinfo($file->original_name, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']);
         });
     @endphp
-    
+
     @if($photos->count() > 0)
     <div class="mb-3">
         <label class="form-label">
@@ -135,23 +135,33 @@
 document.addEventListener('DOMContentLoaded', function() {
     const anggaranInput = document.getElementById('anggaran');
     
+    if (!anggaranInput) {
+        console.error('Anggaran input not found');
+        return;
+    }
+
     // Format input saat user mengetik
     anggaranInput.addEventListener('input', function(e) {
         let value = e.target.value.replace(/\D/g, ''); // Hapus semua karakter non-digit
-        
+
         if (value) {
             // Format dengan titik sebagai pemisah ribuan
             value = parseInt(value).toLocaleString('id-ID');
         }
-        
+
         e.target.value = value;
     });
-    
+
     // Sebelum form disubmit, ubah format kembali ke angka
     const form = anggaranInput.closest('form');
-    form.addEventListener('submit', function(e) {
-        const rawValue = anggaranInput.value.replace(/\./g, ''); // Hapus titik
-        anggaranInput.value = rawValue;
-    });
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            console.log('Form submitting...');
+            const rawValue = anggaranInput.value.replace(/\./g, ''); // Hapus titik
+            anggaranInput.value = rawValue;
+            console.log('Anggaran value:', rawValue);
+            // Don't prevent default - let form submit
+        });
+    }
 });
 </script>

@@ -11,6 +11,11 @@ class Proyek extends Model
     protected $table      = 'proyek';
     protected $primaryKey = 'proyek_id';
 
+    public function getRouteKeyName()
+    {
+        return 'proyek_id';
+    }
+
     protected $fillable   = [
         'kode_proyek',
         'nama_proyek',
@@ -24,14 +29,6 @@ class Proyek extends Model
     protected $appends = [
         'cover_photo_url',
     ];
-
-    /**
-     * Get the route key for the model.
-     */
-    public function getRouteKeyName()
-    {
-        return 'proyek_id';
-    }
 
     public function files()
     {

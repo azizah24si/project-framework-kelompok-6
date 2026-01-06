@@ -132,9 +132,21 @@
 
 @push('css')
 <style>
+.btn-group {
+    position: relative;
+    z-index: 10;
+}
+
+.btn-group .btn {
+    position: relative;
+    z-index: 10;
+    pointer-events: auto;
+}
+
 .btn-group .btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+    z-index: 11;
 }
 
 .btn-group .btn:first-child:hover {
@@ -151,6 +163,11 @@
 
 .table td {
     vertical-align: middle;
+}
+
+.img-thumbnail {
+    position: relative;
+    z-index: 1;
 }
 </style>
 @endpush

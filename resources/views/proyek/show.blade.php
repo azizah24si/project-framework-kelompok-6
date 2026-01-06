@@ -73,47 +73,15 @@
                                 <img src="{{ Storage::url($photo->file_path) }}" class="card-img-top" style="height: 200px; object-fit: cover;">
                                 <div class="card-body p-2">
                                     <small class="text-muted">{{ $photo->original_name }}</small>
-                                    <div class="btn-group w-100 mt-2">
-                                        <a href="{{ Storage::url($photo->file_path) }}" class="btn btn-sm btn-outline-primary" target="_blank">
-                                            <i class="fa fa-eye"></i> Lihat
-                                        </a>
-                                        <form action="{{ route('proyek.files.destroy', $photo->id) }}" method="POST" onsubmit="return confirm('Hapus foto ini?')" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-outline-danger" type="submit">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
+                                    <a href="{{ Storage::url($photo->file_path) }}" class="btn btn-sm btn-outline-primary w-100 mt-2" target="_blank">
+                                        <i class="fa fa-eye"></i> Lihat
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
             @endif
-
-            <!-- Form Upload Foto -->
-            <form action="{{ route('proyek.files.store', $proyek->proyek_id) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="form-group">
-                    <label for="foto_upload" class="form-label">
-                        <i class="fa fa-camera"></i> Tambah Foto
-                    </label>
-                    <input type="file" class="form-control @error('dokumen_proyek.*') is-invalid @enderror"
-                           id="foto_upload" name="dokumen_proyek[]" multiple
-                           accept=".jpg,.jpeg,.png,.gif">
-                    <small class="text-muted">Upload foto (JPG, PNG, GIF) maksimal 5MB per file.</small>
-                    @error('dokumen_proyek')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                    @enderror
-                    @error('dokumen_proyek.*')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                    @enderror
-                </div>
-                <button type="submit" class="btn btn-primary mt-3">
-                    <i class="fa fa-upload"></i> Upload Foto
-                </button>
-            </form>
         </div>
     </div>
 @stop

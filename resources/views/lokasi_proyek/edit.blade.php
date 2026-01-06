@@ -37,7 +37,7 @@
                     <label>GeoJSON (opsional)</label>
                     <textarea name="geojson" rows="4" class="form-control" placeholder='{"type":"Point","coordinates":[lng,lat]'>{{ old('geojson', $item->geojson ? json_encode($item->geojson) : '') }}</textarea>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="gambar" class="form-label">
                         <i class="fa fa-camera"></i> Gambar
@@ -80,9 +80,9 @@
                     </div>
                 </div>
                 @endif
-                <button type="submit" class="btn btn-primary mt-3">
-                    <i class="fa fa-save"></i> Update
-                </button>
+                <a href="{{ route('proyek.index') }}" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> Update
+                    </a>
                 <a href="{{ route('lokasi_proyek.index') }}" class="btn btn-secondary mt-3">
                     <i class="fa fa-arrow-left"></i> Back
                 </a>
